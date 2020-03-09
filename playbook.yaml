@@ -1,0 +1,32 @@
+--- 
+- 
+ 
+  hosts: tag_Name_CA
+  user: ec2-user
+  sudo: yes
+
+  tasks: 
+    - ping: 
+
+    - 
+      name: "Create User"
+      user: "name=eric groups=adm shell=/bin/bash,sudo generate_ssh_key=yes"
+    - 
+      name: "Install {{ package }}"
+      yum: "name={{ package }} state=latest"
+    -
+      copy: "src={{ file }} dest=/var/www/html/"
+      name: "Copy File"
+
+    -
+      copy: "src={{ file2 }} dest=/var/www/html/"
+      name: "Copy File"
+    - 
+      service:
+        name: httpd
+        state: started
+
+  vars: 
+    package: httpd
+    file: index.html
+    file2: style.css
